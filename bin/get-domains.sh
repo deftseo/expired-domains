@@ -53,19 +53,6 @@ while [ $CUR_DATE_CMP -le $END_DATE_CMP ]; do
     fi
 
     if [[ ! -f $FILE_NAME ]]; then
-        # Get the file if we don't have it
-        GET_FILE=true
-
-    else
-        # Get the file if we have one that's too small.
-        FILE_SIZE=$(wc -c <"$FILE_NAME")
-        if [ $FILE_SIZE -le $MIN_FILE_SIZE ]; then
-            echo "Too small! ($FILE_SIZE)  ReGET."
-            GET_FILE=true
-        fi
-    fi
-
-    if [ "$GET_FILE" = true ]; then
         echo "$CUR_DATE: From $JUST_URL"
         wget -O $FILE_NAME $JUST_URL
 
@@ -73,15 +60,15 @@ while [ $CUR_DATE_CMP -le $END_DATE_CMP ]; do
         if [ $FILE_SIZE -le $MIN_FILE_SIZE ]; then
             echo "Too small! ($FILE_SIZE). Deleting."
             rm $FILE_NAME
+
+        else
+            # Extract domain list from the file
+            sed -i -e '/^[a-z0-9-]\+\.[a-z]\{2,\}\(<br>\)\?$/!d' -e 's/<br>//' $FILE_NAME
+
         fi
 
         sleep 5
 
-    fi
-
-    if [[ -f $FILE_NAME ]]; then
-        # Extract domain list from the file
-        sed -i -e '/^[a-z0-9-]\+\.[a-z]\{2,\}\(<br>\)\?$/!d' -e 's/<br>//' $FILE_NAME
     fi
 
     # set up for next iteration
