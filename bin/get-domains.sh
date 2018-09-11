@@ -23,15 +23,12 @@ if [[ ! -d $OUTPUT_DIR ]]; then
     mkdir -p $OUTPUT_DIR
 fi
 
-read Y M D <<<  ${END_DATE//[-: ]/ }
-END_DATE_CMP="$Y$M$D"
-
-read Y M D <<<  ${START_DATE//[-: ]/ }
-START_DATE_CMP="$Y$M$D"
+END_DATE_CMP=`date -d "$END_DATE" +%Y%m%d`
+START_DATE_CMP=`date -d "$START_DATE" +%Y%m%d`
 
 CUR_DATE=$START_DATE
 CUR_DATE_CMP=$START_DATE_CMP
-CUR_YEAR="$Y"
+CUR_YEAR=`date -d "$CUR_DATE" +%Y`
 
 while [ $CUR_DATE_CMP -le $END_DATE_CMP ]; do
     JUST_DATE=`date -d "$CUR_DATE" +%m%d%y`
