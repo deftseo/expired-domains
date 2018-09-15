@@ -51,7 +51,7 @@ while [ $CUR_DATE_CMP -le $END_DATE_CMP ]; do
 
     if [[ ! -f $FILE_NAME ]]; then
         echo "$CUR_DATE: From $JUST_URL"
-        wget -O $FILE_NAME $JUST_URL
+        wget --max-redirect=0 -O $FILE_NAME $JUST_URL
 
         FILE_SIZE=$(wc -c <"$FILE_NAME")
         if [ $FILE_SIZE -le $MIN_FILE_SIZE ]; then
